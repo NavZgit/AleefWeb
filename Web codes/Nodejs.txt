@@ -1,0 +1,251 @@
+******************************************************************************************************
+									NODEJS
+******************************************************************************************************
+// Node.js® is a JavaScript runtime built on Chrome's V8 JavaScript engine.
+// before it was not posssible to run javascript without browser.
+// but with NodeJS you can run javascript code in systems.
+// node also has the largest economy of collection of libraries than anything else.
+
+-------------------------------
+	install nodeJS
+-------------------------------
+// download nodeJS from their website and install it.
+
+// to run node shell
+>> node
+
+//to run js script from commandline
+>> node filename.js
+
+---------------------------------
+	NPM
+---------------------------------
+// node package manager
+// it is an open source node packages that others wrote that you can add and use in your projects.
+// npm comes with node
+// basically someone creates a program and uploads it in npm site and we can use that code in our project.
+// check documentation for that package to learn about it.
+
+// to download package
+>> npm install [package name]
+
+//install package 'nodemon' for automatic server code change detection
+>> npm install -g nodemon
+
+//to run script using nodemon
+>> nodemon server.js
+
+// example: readline-sync is a package for user console interaction.
+>>npm install readline-sync
+
+			var rd = require( 'readline-sync' );
+
+			var name = rd.question("tell me your name friend ");
+			console.log( "Hello " + name );
+
+			animals = ['Lion', 'Elephant', 'Crocodile', 'Giraffe', 'Hippo'];
+			index = rd.keyInSelect(animals, 'Which animal?');
+			console.log('Ok, ' + animals[index] + ' goes to your room.');
+
+
+--------------------------------------------
+	creating your own modules with node
+--------------------------------------------
+
+myModule.js
+					
+					var sum = function(num1, num2){
+ 						 return num1+num2;
+					}
+
+					module.exports = sum;			//this is used to export function
+
+script.js
+
+					var sumOfNumber = require('./myModules');
+					var result = sumOfNumber(5, 10);
+					console.log(result);
+
+
+---------------------------------------------------
+	creating a server API - step by step
+---------------------------------------------------
+//create your project folder
+>>mkdir firstAPI
+
+//create a file called 'eg. server.js'
+
+//create a npm environment so that node can effectively install and use packages from npm server.
+>> npm init
+//this will create dependency file(package.json) in your project
+
+//since we are building a server, we need a package called express
+//express can handle incoming web requests and knows what to do with them.
+// use --save to maintain consistancy between packages in your project and npm server.
+>> npm install --save express
+// notice the change in package.json dependency file
+
+//if you lose any package file or folder, since --save is implemented, you can reinstall by
+>>npm install
+
+//edit server.js to give proper response to server
+
+						//importing express module
+						var express = require('express');
+
+						//Accessing express fucntionalities
+						var app = express();
+
+						//get method will get the incoming request from client and returns proper response
+						app.get('/', function(request, response){
+						  //use request parameter to deal with incoming request
+						  //use respomse parameter to deal with what to send as response
+						  //note: always send a response both in get and post.
+						  // the send() is in JSON format.
+						  response.send("the server has hereby responded");
+
+						});
+
+						// handling get() request at domain/zee
+						app.get('/zee', function(request, response){
+						  response.send("hello there, call me zee");
+						});
+
+
+						//listen method will determine the port the server listens to
+						app.listen(3000, function(){
+						  //this is a callback
+						  console.log("first API running on port 3000");
+						});
+
+
+// the server is thus configured to handle get requests
+//now you will be able to get a json response when you request on localhost:3000
+
+//use this in case of error
+
+						//Allow all requests from all domains & localhost
+						app.all('/*', function(req, res, next) {
+						  res.header("Access-Control-Allow-Origin", "*");
+						  res.header("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Accept");
+						  res.header("Access-Control-Allow-Methods", "POST, GET");
+						  next();
+						});
+
+
+---------------------------------------------
+	sending back proper JSON body to client
+---------------------------------------------
+// use package 'body-parser'
+// body-parser can properly parse JSON objects.
+
+>>npm install --save body-parser
+		
+							var express = require('express');
+							var app = express();
+
+							var bodyParser = require('body-parser');
+
+							//use() code will run even before get() request recieves request.
+							// so this is a place u do formatting and stuffs.
+							app.use(bodyParser.json());
+
+							//this basically says give us arrays and strings. reject anything crazy..
+							app.use(bodyParser.urlencoded( {extended : false } ));
+
+							// data to sent to client
+							var ingredients = [
+							  {
+							    "id" : "245fds",
+							    "text": "Egg"
+							  },
+							  {
+							    "id" : "dfg448f",
+							    "text": "Apple"
+							  },
+							  {
+							    "id" : "gfdg75",
+							    "text": "biscuit"
+							  }
+							];
+
+							app.get('/ingredients', function(request, response){
+							  response.send(ingredients);
+							});
+
+							app.listen(3000, function(){
+							  console.log("first API running on port 3000");
+							});
+
+// now client will be able to recieve ingredients.
+
+
+-----------------------------------------
+	handling POST requests
+-----------------------------------------
+
+// use postman software for sending JSON POST requests.
+// add ingredientsid and text in body of request.
+
+							app.post('/ingredients', function(request, response){
+							  // request.body has post request content
+							  var recieved_ingredient = request.body;
+
+							  //validation check
+							  if(!recieved_ingredient || recieved_ingredient.text === ""){
+							    response.status(500).send( {error : "no ingredient to post"} );
+							  }
+							  else{
+							    ingredients.push(recieved_ingredient);
+							    response.status(200).send( recieved_ingredient.text + " is saved" );
+							  }
+
+							  console.log("post request provided for client");
+							});
+
+
+// now client will be able to post data to your database [ here just save to array..oops :(  ]
+// check express documentation for handling other types of requests.
+
+
+-----------------------------------------
+	handling PUT requests
+-----------------------------------------
+// PUT requests are used to update existing data
+
+//put url : localhost:3000/ingredients/245fds
+//here the id to be changed is passed as parameter that server code recognises.
+
+//you dont neccesarily need to pass parameter in url. 
+// you cudve grabbed id from body itself and change logic in code like in POST.
+					
+								//we use :ingredientId to grab the argument value (: denotes parameter)
+								app.put('/ingredients/:ingredientId', function(request, response){
+								  var newIngText = request.body.text;
+
+								  if(!newIngText || newIngText === ""){
+								    response.status(500).send({error : "provide proper ingredient text"});
+								  }
+								  else{
+								    //iterate through id's and update text if id is found
+								    var idFound = false;
+								    for(var i=0; i < ingredients.length; i++){
+								      var ing = ingredients[i];
+								      if(ing.id === request.params.ingredientId){
+								        ingredients[i].text = newIngText;
+								        idFound = true;
+								        break;
+								      }
+								    }
+
+								    if(!idFound){
+								      response.status(500).send({error : "id not found"});
+								    }
+								    else{
+								      response.send(ingredients);
+								    }
+
+								  }
+								});
+
+

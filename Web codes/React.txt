@@ -1,0 +1,473 @@
+
+
+
+					███████▀▀▀░░░░░░░▀▀▀███████
+					████▀░░░░░░░░░░░░░░░░░▀████
+					███│░░░░░░░░░░░░░░░░░░░│███
+					██▌│░░░░░░░░░░░░░░░░░░░│▐██
+					██░└┐░░░░░░░░░░░░░░░░░┌┘░██
+					██░░└┐░░░░░░░░░░░░░░░┌┘░░██
+					██░░┌┘▄▄▄▄▄░░░░░▄▄▄▄▄└┐░░██
+					██▌░│██████▌░░░▐██████│░▐██
+					███░│▐███▀▀░░▄░░▀▀███▌│░███
+					██▀─┘░░░░░░░▐█▌░░░░░░░└─▀██
+					██▄░░░▄▄▄▓░░▀█▀░░▓▄▄▄░░░▄██
+					████▄─┘██▌░░░░░░░▐██└─▄████
+					█████░░▐█─┬┬┬┬┬┬┬─█▌░░█████
+					████▌░░░▀┬┼┼┼┼┼┼┼┬▀░░░▐████
+					█████▄░░░└┴┴┴┴┴┴┴┘░░░▄█████
+					███████▄░░░░░░░░░░░▄███████
+					██████████▄▄▄▄▄▄▄██████████
+					███████████████████████████    
+
+
+******************************************************************************************************
+							REACT - ES6
+******************************************************************************************************
+#React code is in ES6 format instead of plain javascript.
+#ES6 is converted to plain javascript by a compiler(babel) which is understood by browser.
+
+#dependency 'react' allows us to write JSX code. and also help to render elements into DOM.
+#dependency 'react dom' is like glue that takes rendering and brings it into browser to display.
+
+
+//globally install react skeleton using npm 
+>> npm install -g create-react-app
+
+//create new project
+>> create-react-app swag-shop-web
+
+//to start project server and show front end in browser
+//[in project folder]
+>> npm start
+
+-----------------------
+production build
+-----------------------
+//after completing a project,you can ready it for production
+>> npm run build
+
+//after creating build files, run it locally with 'serve'
+
+//if u want to open index.html of build instead of runnning with server, add "homepage":"." in package.json before build
+
+
+
+
+---------------------------------------------
+	React foldering structure and setup
+---------------------------------------------
+
+public : all globally accessible files 
+
+src : all individual component folders and services
+
+//install jsx format for your editor
+
+//create a new folder in src called 'app' and move app.js, app.css, app.test.js to it.
+//make neccessary import changes in dependent files
+
+//react creates a server that renders things. so you cannot inspect it in your browser
+// to inspect, download chrome extension - 'React developer tools' 
+
+
+
+
+
+
+----------------------------------------------
+	add bootstrap to react project
+----------------------------------------------
+//create 2 folders in public folder
+			-css
+			-js
+
+//download bootstrap, jquery(compressed version), and tether
+
+//add bootstrap css files into css and js files into js folder
+//add jquery and tether to js folder
+
+//in index.html link all files
+	
+				    <link rel="stylesheet" href="%PUBLIC_URL%/css/bootstrap.min.css" />
+    				<script type="text/javascript" src="%PUBLIC_URL%/js/jquery-3.6.0.min.js" > </script>
+   					<script type="text/javascript" src="%PUBLIC_URL%/js/bootstrap.min.js" > </script>
+   					<script type="text/javascript" src="%PUBLIC_URL%/js/tether.min.js" > </script>
+
+
+
+//now you can add bootstrap styles to all components.
+
+
+
+
+------------------------------------------------
+		some syntax styles
+------------------------------------------------
+
+importing
+----------
+import [variable_any_name] from [module name]
+
+			import logo from './logo.svg';
+			<img src= {logo}/>
+
+
+
+
+
+-------------------------------------------------
+	HTTP api service
+-------------------------------------------------
+//this service talks to external server via http and gets data to our app
+
+//create a folder 'services' in src
+//create a file in services called 'http-service.js'
+
+//install client side webs service package 'whatwg-fetch' into our project
+>> npm install --save whatwg-fetch
+
+
+//http-service.js
+
+									import 'whatwg-fetch';
+
+									//you can have class in es6 codes
+									class HttpService {
+
+									  //this function fetches data from api
+									  getProducts = () => {
+									    fetch('http://192.168.0.125:3004/product').then(
+									      response => {
+									        console.log( response.json() );
+									      }
+									    );
+									  }
+
+									}
+
+									//exporting this service to be available to components.
+									export default HttpService;
+
+
+//in App.js use that service
+
+								import HttpService from '../services/http-service';
+								const http = new HttpService();
+
+								http.getProducts();
+
+//full app.js(to maintain class instead of function)
+
+								import React, {Component} from 'react';
+								import logo from './logo.svg';
+								import './App.css';
+
+								import HttpService from '../services/http-service';    
+
+								const http = new HttpService();            
+
+								class App extends Component {
+
+								  constructor(props){
+								    super(props);
+								    http.getProducts();
+								  }
+
+								  render() {
+								    return (
+								      <div className="App container">
+								        <header className="App-header">
+								          <img src={logo} className="App-logo" alt="logo" />
+								          <p>
+								            Edit <code>src/App.js</code> and save to reload.
+								          </p>
+								          <a
+								            className="App-link"
+								            href="https://reactjs.org"
+								            target="_blank"
+								            rel="noopener noreferrer"
+								          >
+								            Learn shit
+								          </a>
+								        </header>
+								      </div>
+								    );
+								  }
+
+
+								}
+
+								export default App;
+
+
+------------------------
+	javascript promises
+------------------------
+//http requests are 'asynchronous'by nature. we dont know when the response is going to come back.
+// we want the component to know when the data recieves. so we use javascript promises.
+//promise basically says "hey i will definitely bring back a response or rejection", so component using that can act accordingly
+
+http-server.js
+--------------
+
+							import 'whatwg-fetch';
+
+							class HttpService {
+
+							  //this function fetches data from api url
+							  getProducts = () => {
+							    var promise = new Promise( (resolve, reject) => {
+
+							      fetch('http://192.168.0.125:3004/product').then(
+							        response => {
+							          resolve( response.json() );
+							        }
+							      );
+
+							    } );
+
+							    //note this return will initially return just the promise. since https's asynchronous nature.
+							    //it will return data when available to the component called it.
+							    return promise;
+							  }
+
+							}
+
+							export default HttpService;
+
+app.js
+------
+//create a function that handles it. call it in the component that wants it.
+
+						import HttpService from '../services/http-service';
+						const http = new HttpService();
+
+						//this will handle http api request and take care of prmoises.
+						loadApiData = () => {
+						    http.getProducts().then(
+						      productData => {
+						        //when promise brings real data
+						        console.log(productData);
+						      },
+						      err => {
+						        //when promise brings not the actual data
+
+						      }
+						    );
+						}
+
+//create a constructor for app.js class and bind all functions.
+//call loadApiData()
+
+							  constructor(props){
+							    super(props);
+
+							    //bind functions
+							    this.loadApiData = this.loadApiData.bind(this);
+
+							    this.loadApiData();
+							  }
+
+
+
+--------------------------------------------
+	Adding component
+--------------------------------------------
+//create folder 'product' in src
+		-product.js
+		-product.css
+
+product.js
+----------
+
+							//this file describes the product component
+
+							//import component funciontality in react module
+							import React, {Component} from 'react';
+
+							//importing attached css
+							import './product.css';
+
+							class Product extends Component{
+							  //whenever you want to show something on screen, you can render function
+							  //render() is particular to Component class
+							  //it returns thing you want to render. always a div block
+							  render() {
+							    return(
+							      //component definition.it should be minimal to prmote reusability
+							      <div className="card">
+							        <img className="card-img-top"  alt="Product"></img>
+							        <div className="card-block">
+							          <h4 className="card-title"></h4>
+							          <p className="card-text">Price: $ </p>
+							          <a href="#" className="btn btn-primary"> Add to wishlist </a>
+							        </div>
+							      </div>
+
+							    );
+							  }
+
+							}
+
+							export default Product;
+
+using component in app.js
+--------------------------
+
+//import component by its exported name
+
+							import Product from '../product/product';
+
+//call the component in the html hierarchy
+
+							<div className="product-display-section">
+						        <Product />
+						    </div>
+
+
+
+------------------------------------------------------
+	creating UI with fake data
+------------------------------------------------------
+
+------------------------------
+	props (properties) and state
+------------------------------
+// PROPS : things that are read only. 
+//props always comes from upper components(parent) to lower components(children).
+//eg:			<Product price="4.15" title="Reyban sunglasses" imgUrl="http....." />
+
+//this code in parent component will pass these props to child component in product.js
+//we can use it by-
+//					{this.props.price}
+					{this.props.title}
+					{this.props.imgUrl}
+
+//note: { } tag allows you to insert javascript between them
+
+
+// STATE: things that are changable
+
+// a components have things thar are changable and things that are read-only
+
+
+product.js
+-----------
+
+						<div className="card product">
+					        <img className="card-img-top" src= {this.props.imgUrl} alt="Product"></img>
+					        <div className="card-block">
+					          <h4 className="card-title"> {this.props.title} </h4>
+					          <p className="card-text">Price: ${this.props.price} </p>
+					          <button  className="btn btn-primary"> Add to wishlist </button>
+					        </div>
+					      </div>
+
+product.css
+------------
+
+						.product{
+						  margin-bottom: 35px;
+						  padding: 10px;
+						}
+
+						.product img {
+						  max-width: 25rem;
+						  max-height: 20rem;
+						}
+
+
+app.js
+-------
+			  			<div className="container product-display-section">
+
+					        <div className="row">
+					            <div className="col-sm-12 col-md-4">
+					                <Product price="4.15" title="reyban sunglasses" imgUrl="https://images.ray-ban.com/is/image/RayBan/8053672614169__002.png?impolicy=RB_Product&width=1024&bgc=%23f2f2f2" />
+					            </div>
+					            <div className="col-sm-12 col-md-4">
+					                <Product price="4.15" title="reyban sunglasses" imgUrl="https://images.ray-ban.com/is/image/RayBan/8053672614169__002.png?impolicy=RB_Product&width=1024&bgc=%23f2f2f2" />
+					            </div>
+					            <div className="col-sm-12 col-md-4">
+					                <Product price="4.15" title="reyban sunglasses" imgUrl="https://images.ray-ban.com/is/image/RayBan/8053672614169__002.png?impolicy=RB_Product&width=1024&bgc=%23f2f2f2" />
+					            </div>
+					            <div className="col-sm-12 col-md-4">
+					                <Product price="4.15" title="reyban sunglasses" imgUrl="https://images.ray-ban.com/is/image/RayBan/8053672614169__002.png?impolicy=RB_Product&width=1024&bgc=%23f2f2f2" />
+					            </div>
+					        </div>
+					    </div>
+
+app.css
+--------
+							.product-display-section{
+							  padding-top: 35px;
+							}
+
+
+
+
+-------------------------------------------------------
+	getting htttp data and inflating component with it
+-------------------------------------------------------
+
+app.js
+------
+//create predefined state array this.state 
+//bind new function
+
+							  constructor(props){
+							    super(props);
+
+							    //state will store all dynamically changed states
+							    //all products fetched from api server is placed in products[]
+							    this.state = {products : [] };
+
+							    //bind functions
+							    this.loadApiData = this.loadApiData.bind(this);
+							    this.loadEachProduct = this.loadEachProduct.bind(this);
+
+							    this.loadApiData();
+							  }	
+
+//create function that gets data from this state and outputs each component
+
+							  //this function will produce product component from state.product array to be displayed
+							  loadEachProduct = () => {
+							    //map() will iterate through product array and loads component with values
+							    const list = this.state.products.map(
+							      (productJSON) =>
+							        //the key should be the unique property to be identifiable with
+							        <div className="col-sm-12 col-md-4" key={productJSON._id}>
+							          <Product price={productJSON.price} title={productJSON.title} imgUrl={productJSON.imgUrl} />
+							        </div>
+
+							    );
+							    return (list);
+							  }
+
+//edit loadApiData to fill this.state
+
+							  loadApiData = () => {
+							      //we use this globally in function to compensate for asynchronous nature
+							      var self = this;
+							      http.getProducts().then(
+							        productData => {
+							          //when promise brings real data
+							          //setState will re-render all its components and children(refresh render)
+							          self.setState({products: productData});
+							        },
+							        err => {
+							          //when promise brings not the actual data
+							        }
+							      );
+							  }
+
+//change render() to call function
+
+							     <div className="container product-display-section">
+
+							           <div className="row">
+							              {this.loadEachProduct()}
+							           </div>
+							     </div>

@@ -1,0 +1,136 @@
+******************************************************************************************************
+							HOSTING A SERVER
+******************************************************************************************************
+# We use a website called 'digital ocean (paid)' to host our server
+
+#create a droplet in your digital ocean account.
+
+#setup your ssh so that you can access it through your terminal.
+
+#note: you cannot access your hosted ip address through browser yet.
+
+-------------------------------------------------
+		NGINX
+-------------------------------------------------
+# it is a webserver installed in your webserver that publishes your projects.
+
+#access your webserver through terminal
+
+#search on digital ocean how to setup nginx and follow the procedure.
+
+#now you can access your ip through web browser.
+
+
+------------------------------------------------------------------------------
+	setup server ssh key with github and make that project uploaded into your server
+-------------------------------------------------------------------------------
+
+#access your webserver through terminal.
+#create ssh public and private key
+#upload its public key to your github project
+
+#access your server through terminal
+#got to /var/www .  this is where you put your projects.
+#get your project ssh key from githib
+#git clone [the ssh link]
+#voila!!! your project is uploaded to your digital ocean server.
+
+--------------------------------------------------
+	Setup a domain
+--------------------------------------------------
+
+#Buy a domain from somewhere. for eg 'namecheap.com', 'godaddy'
+#add that domain name to your websever
+#set up your DNS servers that is listed in your webserver to the namespace account.
+
+#now you can access your webserver through domain name.
+
+-------------------------------------------------------
+	configuring nginx to point to your project folder
+-------------------------------------------------------
+
+#access your webserver through terminal
+#go to /etc/nginx
+
+#there is two folder of concern here.
+			- sites-avaliable
+			- sites-enabled
+
+#go to site-available and create a new file and add code that points to your project.
+#refer default file in there and also refer digitalocean docs.
+
+#go back a directory
+#now link your file in sites-available with sites-enabled using command (refer doc)
+
+#restart nginx
+>> systemctl restart nginx
+
+#now your project is available to the brower.
+
+----------------------------------------------------------------------------
+		UNDERSTANDING WEB REQUESTS
+----------------------------------------------------------------------------
+
+# Communication between a client and server takes place through http protocol.
+
+#client sends a HTTP GET REQUEST to server.
+
+#server can chose what to do with it. ignore or send what it is being asked.
+#This HTTP RESPONSE will have
+						- headers
+						- body  (contains HTML and stuff)
+
+#the body is typically in JSON / XML format.
+
+#the browser decodes this html body and visually creates  the page.
+
+----------------------------------------------------------------------
+
+#now take the case of an app requesting to a server.
+#the app wants to show infinte list of videos.
+#having send all the videos to the app device is tragic.
+
+#app sends request to the server. suppose devslops/IoS course/videos
+#the server send back its HTTP response
+#here the parsed JSON is not HTML. its a request for data
+#here the JSON have URL for the video1, video2.. their titles, duration etc. 
+# the response is loaded up in your app.
+#when you click on a video through that url, the video is delievered from server.
+
+# we conclude that the HTTPS responds can be anything like an HTML page or request for url, data etc.
+
+-------------------------------------------------------------------------
+
+# Suppose the client sends HTTP POST REQUEST to the server
+# the client is basically saying to add a new record of change. eg, completed a course, finished a game level etc.
+# so this time, the client is creating a JSON body with the neccesary content.
+# the server get it, process it, probably store the change in its database.
+# the server sends back HTTP RESPONSE indicating success.
+
+note: there is also other requests like PUT REQUEST and DELETE REQUEST which works in same fashion.
+
+--------------------------------
+		JSON
+--------------------------------
+#Javascript object notation
+#datas are sent in human readable format aswell as easy to parse/decode by machines.
+#similar to javascript object. (has keys and values)
+#this data can be parsed by JSON parsers in client device.
+
+#example:
+				{"menu": {
+				  "id": "file",
+				  "value": "File",
+				  "popup": {
+				    "menuitem": [
+				      {"value": "New", "onclick": "CreateNewDoc()"},
+				      {"value": "Open", "onclick": "OpenDoc()"},
+				      {"value": "Close", "onclick": "CloseDoc()"}
+				    ]
+				  }
+				}}
+
+#you can use 'google chrome postman' to test json requests or responses.
+#to find API (application program interface) try like "pokemon api"
+
+

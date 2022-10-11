@@ -1,0 +1,126 @@
+**********************************************************************************************
+									HTML
+**********************************************************************************************
+
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<title>Home Page</title>
+	</head>
+
+	<body>
+		<img
+			src="Zcode.png"
+			alt="Zeecode logo">
+
+		<h2>Welcome to the Realm of Zeecode</h2>
+		<h3>My world awaits you. Millions of random programs right at your finger tips.</h3>
+
+		<table
+				cellpadding = "13">
+			<tr>
+				<td>
+					<a href="#">HOME </a>
+				</td>
+				<td>
+					<a href="#">CATEGORIES </a>
+				</td>
+				<td>
+					<a href="#">TOP PROGRAMS </a>
+				</td>
+				<td>
+					<a href="#">DISCOVER RANDOMLY </a>
+				</td>
+				<td>
+					<a href="RequestPage.html#">REQUEST CUSTOM PROGRAM </a>
+				</td>
+			</tr>
+		</table>
+
+		<br>
+		<hr>
+
+		<h3>What the hell is this site?</h3>
+		<p>We bring together millions of various programs from various countries  and make it all available to our viewers for absolutely <b><i>free</i></b>. You can do whatever you want with the stuff available here. just be careful with your freedom for <em> you alone carry the burden of your will</em> </p>
+		<hr>
+
+		<h3>Why ZeeZone?</h3>
+		<ol>
+
+			<li>Fun and exciting</li>
+			<li>Discover randomly something new</li>
+			<li>time pass and creative</li>
+			<li>you never know when it is going to be useful</li>
+
+		</ol>
+		<hr>
+
+	</body>
+
+</html>
+
+
+
+**********************************************************************************************
+										CSS
+**********************************************************************************************
+
+------------------------------------
+internal css(in the same html page)
+------------------------------------
+
+<head>
+	<style type="text/css">
+
+			h2 {
+				color: red;
+			}
+
+			h3 {
+				color: brown;
+			}
+
+		</style>
+
+</head>
+
+----------------------------
+External css
+----------------------------
+
+<head>
+	<link rel="stylesheet" type="text/css" href="homestyle.css">
+</head>
+
+
+h2 {
+	color: red;
+}
+
+.section {
+    background-color: #EEEEEE;
+    padding: 0px;
+    margin-bottom: 10px;
+    border-radius: 2px;
+}
+
+.question {
+	color: #212121;
+	font-size: 18pt;
+}
+
+h1 {
+    font-size: 40pt;
+    color: #3b464c;
+    padding-top: 5px;
+    margin: 0;
+    font-weight: bold;
+    text-align: center;
+}
+
+a{
+	font-family: 'Roboto Condensed', sans-serif;
+	font-size:20px;
+   text-decoration:none;
+}

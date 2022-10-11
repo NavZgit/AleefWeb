@@ -1,0 +1,226 @@
+******************************************************************************************************
+									PUTTING EVERYTHING TOGETHER
+******************************************************************************************************
+
+--------------------------------------------------------------------------------------------------------------------
+										PHASE 1 (build project setup and skeleton code)
+--------------------------------------------------------------------------------------------------------------------
+# create a new project folder - swag shop api
+
+#create server.js
+
+>>npm init
+>>npm install --save body-parser
+>>npm install --save express
+>>npm install --save mongoose
+>>mongod
+
+#edit server.js (starting skeleton snippet)  (test using nodemon)
+
+							//initialising packages
+							var express = require('express');
+							var bodyParser = require('body-parser');
+							var mongoose = require('mongoose');
+							var app = express();
+
+							//adding mongoose database connection
+							//note: server has to run for this to work
+							var db = mongoose.connect('mongodb://localhost/swag-shop');
+
+
+							//port setting
+							app.listen(3000, function(){
+							  console.log("swag shop api server running on port 3000");
+							});
+
+
+--------------------------------------------------------------------------------------------------------------------
+										PHASE 2 (database connection and defining schemas)
+--------------------------------------------------------------------------------------------------------------------
+# we need to create models using mongoose so it can properly handle database connection.
+
+#create folder dbModels
+		#create file - products.js
+		#create file - wishList.js
+
+#products.js
+
+								// this database model defines the Products table in database.
+								//the database query will go forward only through rules defined in here
+
+								var mongoose = require('mongoose');
+
+								//defines schema for product by calling Schema function in mongoose
+								var Schema = mongoose.Schema;
+
+								var product = new Schema({
+								  //define column name and its type
+								  title : {type :String, required: true},
+								  price : Number,
+								  likes : Number
+								});
+
+								//export the model to be accessed by other codes
+								//here we are exporting schema product.
+								//in the database this schema will known as table 'Products'
+								module.exports = mongoose.model('Products', product);
+
+
+#wishList.js
+
+								//this model defines table Wishlist
+
+								var mongoose = require('mongoose');
+
+								var Schema = mongoose.Schema;
+
+								//this allows us to access automatically created IDs
+								var ObjectId = mongoose.Schema.Types.ObjectId;
+
+								var wishList = new Schema({
+								    title : {type: String, default: "personal wish list"},
+
+								    // instead of defining new schema, we can create a relationship to Products database
+								    // we just need ID of product and could access it whenever neccesary
+								    //products is an array that has objectId refered from Products table
+								    products : [ {type: ObjectId, ref: 'Products'}  ]
+								});
+
+								module.exports = mongoose.model( "WishList", wishList);
+
+#import created models in server.js
+
+								//importing databases models file
+								var products = require('./dbModels/products');
+								var wishlist = require('./dbModels/wishList');
+
+
+
+--------------------------------------------------------------------------------------------------------------------
+										PHASE 3 (implement API that uses mangoose to connect to database)
+--------------------------------------------------------------------------------------------------------------------
+
+#server.js (handling requests)
+
+										//the product owner should be able to enter their product to our databases
+										app.post('/products', function(request, response){
+										  //create a new product
+										  var product = new Product();
+
+										  //parse request entry
+										  product.title = request.body.title;
+										  product.price = request.body.price;
+
+
+
+							///////////////////////  PRODUCT SECTION  //////////////////////////////			  
+
+										  //save entry to database using save()
+										  //first parameter denotes error if any
+										  //second parameter denotes the successful entry
+										  product.save(function(err, savedProduct){
+										    if(err){
+										      response.status(500).send({error: "post operation failed"});
+										    }
+										    else{
+										      response.send(savedProduct);
+										      console.log("saved new entry");
+										      console.log(savedProduct);
+										    }
+
+										  });
+										});
+
+
+										//get all products.
+										app.get('/products',function(request, response){
+										  //we directly access Product database and use find()
+										  Product.find({}, function(err, allProducts){
+										    if(err){
+										      response.status(500).send({error: "get request cannot be processed"});
+										    }
+										    else{
+										      response.send(allProducts);
+										    }
+										  })
+										});
+
+										//get one product by its id.
+										app.get('/products/:productId', function(request, response){
+										  var proId = request.params.productId;
+										  Product.find({ _id: proId }, function(err, outProduct){
+										    if(err){
+										      response.status(500).send({error: "Cannot find product"});
+										    }
+										    else{
+										      response.send(outProduct);
+										    }
+										  });
+										});
+
+
+
+						/////////////////////// WISHLIST SECTION //////////////////////////////
+
+										//add new wishlist to Wishlist table
+										app.post('/wishlist', function(request, response){
+										  var list = new Wishlist();
+
+										  list.title = request.body.title;
+
+										  list.save(function(err, savedList){
+										    if(err){
+										      response.status(500).send({error: "Wishlist could not be created"});
+										    }
+										    else{
+										      response.send(savedList);
+										    }
+										  });
+										});
+
+										//see all wishlist
+										app.get('/wishlist', function(request, response){
+										  //see the wishlist but each should populate entire product instead of just the productId
+										  //populate parameter:
+										  //    - path : products is the element in wishlist to be modified
+										  //    - model : Products is what to populate it with
+										  Wishlist.find({}).populate({path: 'products', model: 'Products'}).exec(function(err, populatedWishlist){
+										    if(err){
+										      response.status(500).send({error: "something went wrong"});
+										    }
+										    else{
+										      response.send(populatedWishlist);
+										    }
+										  });
+										});
+
+
+										// add productId into existing wishList's products array
+										app.put('/wishlist/product/add', function(request, response){
+										  var proId = request.body.productId;
+										  var wishId = request.body.wishlistId;
+
+										  //find productid if it exist from Products table
+										  Product.findOne({_id : proId}, function(err, outProduct){
+										    if(err){
+										      response.status(500).send({error: "could not find the product"});
+										    }
+										    else{
+										      //find the wishlist from wishlist table
+										      //first parameter is searching condition
+										      //second parameter is column to be updated and its new value
+										      //third is function
+										      Wishlist.update({_id : wishId},{$addToSet : {products : outProduct._id} }, function(err, newWishlist){
+										        if(err){
+										          response.status(500).send({error: "wishlist could not be found"});
+										        }
+										        else{
+										          response.send("Successfully added to wishlist");
+										        }
+										      });
+										    }
+										  });
+
+										});
+
+

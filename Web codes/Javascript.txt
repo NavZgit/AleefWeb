@@ -1,0 +1,208 @@
+**********************************************************************************************
+								JAVASCRIPT
+**********************************************************************************************
+
+#it is structurally not good to include javascript in html/
+#better link external js file
+
+--------------------------
+	External linking
+-------------------------
+#in last of body portion
+
+	<script type="text/javascript" src="myscript.js"> </script>
+
+
+------------------------------
+	Common commands
+------------------------------
+-> console.log("check me in inspect");				#prints in browser console
+
+
+------------------
+	comments
+-----------------
+//single line
+
+/* 
+	multiline
+*/
+
+
+---------------------
+	variables
+---------------------
+#javascript is a loosely types language. which means auto conversion of datatypes happens.
+
+var name = "navas";
+var fullName = name + " cv";
+
+---------------------
+	Array
+---------------------
+#Array is ordered list of elements
+#eventhough javascript allows adding multiple datatype in same array. never do that.
+
+var students = ["Jimmy", "Samantha", "Arun"];
+var naughtyList = [];
+
+naughtyList.push(students[0]);							#add element to Array
+
+var index = students.indexOf("Jimmy")	;				#index value is -1 if element doesnt exist
+
+naughtylist.splice(index, 1);							#adds/removes items to/from an array, and overrides old array.
+
+---------------------------------------
+	Comparators and logical ops
+---------------------------------------
+
+	true
+	false
+
+	!booleanValue
+
+	== 		#equals (whether values are same)
+	===		#equals (whether value and type are same)
+	!==		#not equal to (checks value and type)
+	<=		#less than or equal to
+	>= 		#greater than or equal 
+
+	&&		and
+	||		or
+
+---------------------------------------
+	Conditionals
+---------------------------------------
+
+if(condition){
+	
+}
+else if(condition){
+	
+}
+else{
+	
+}
+
+---------------------------
+	Loops
+---------------------------
+
+for loop
+---------
+			for(var x = 0; x < students.length; x++ ){
+  				console.log(students[x]);
+			}
+
+while loop
+----------
+			var x = 0;
+			while(x < 10){
+				x++;
+			}
+
+
+for-in loop (for composite datatypes)
+----------------------------------------
+			
+			for(num in numbers){
+  				console.log( num );
+			}
+
+
+--------------------------
+	function
+--------------------------
+
+ function reverse(word){
+   var temp  = "";
+   for(var x = word.length-1; x > -1; x--){
+      temp += word[x];
+   }
+   return temp;
+ }
+
+ reverse("navas");
+
+ 		OR
+ 	
+ var makeTransaction = function()
+ {
+
+ };
+
+ makeTransaction();
+
+-------------------------------------
+ 	Object (more like a dictionary)
+-------------------------------------
+
+var pokemon = {
+  pikachu : {color: "Yellow", type : "Electricity"},
+  charmander : {color: "Red", type : "Fire"}
+};
+
+pokemon.charmander.type 	
+
+	OR
+	
+pokemon["pikachu"]["color"]	
+
+---------------------------
+	object with function
+---------------------------
+
+var pokemon = {
+  pikachu :
+    { color: "Yellow",
+      type : "Electricity",
+      talk : function(){
+                return "I am " + this.type + " type pikachu";
+              }
+    }
+};
+
+console.log( pokemon.pikachu.talk()  );
+
+-----------------------------------------
+another method of creating object
+-----------------------------------------
+
+var health = new Object();				//defines new empty object/dictionary
+
+health.pikachu = 75;
+health.bulbasaur = 80
+console.log(health.pikachu);
+
+---------------------------------------
+	Object creation using constructor
+---------------------------------------
+
+function Student(firstname, lastname, age){
+  this.firstname = firstname;
+  this.lastname  = lastname;
+  this.age = age;
+  this.greeting = function(){
+    return "hi I am " + this.firstname;
+  };
+}
+
+var mydaughter = new Student("Zara", "navas", 4);
+
+console.log( mydaughter );
+console.log( mydaughter.greeting() );
+
+
+----------------------------------------
+	HTML connection
+----------------------------------------
+
+
+var paraToChange = document.getElementById('para');
+var pressButton = document.getElementById('but');
+
+pressButton.addEventListener("click", displayDate );
+
+function displayDate() {
+  paraToChange.innerHTML = Date();
+}

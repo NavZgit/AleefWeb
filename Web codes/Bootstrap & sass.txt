@@ -1,0 +1,202 @@
+**********************************************************************************************
+						Bootstrap 4 - framework for building website easily
+**********************************************************************************************
+
+
+#download bootstrap 4 from internet
+#unzip and paste the folder in your project folder
+#open your project folder using any editor so that bootstrap is loaded in it.
+
+/**
+	bootstrap is a bunch of js and css classes and file that you can include/use in your projects.
+	-> start with copying the starter template
+	-> link bootstrap-4.3.1-dist/css/bootstrap-grid.min.css
+	-> link bootstrap-4.3.1-dist/css/bootstrap.min.css
+	-> include script bootstrap-4.3.1-dist/js/bootstrap.min.js
+
+	->include your own stylesheet last so that you can overwrite bootstrap styles if needed
+
+	refer to bootstrap website for their example components
+	copy the required stuffs in your project.
+
+**/
+
+/** BOOTSTRAP RULES
+	Bootstrap follows a set of design pattern. so build a system using their prewritten system.
+	for eg. always starts with containers.
+**/
+
+------------------
+grid system
+------------------
+#always add a container first for bootstrap to work properly.
+#bootstrap works with gridsystem of 12. so col-8 would have 8 spaces wide
+
+#grid system includes;
+	 container
+	 row
+	 col
+
+#Always starts with containers
+#All of our content has to be inside col.
+#and col can be the only immediate child of parent row.
+
+-----------------------------------
+basic grid system starting format
+-----------------------------------
+
+		<div class="container">
+			<div class="row">
+				<div class="col"></div>
+
+				<div class="col-8">
+				<!-- this col is where our login portal will live -->
+
+
+				</div>
+
+				<div class="col"></div>
+			</div>
+		</div>
+
+
+--------------------
+		card
+--------------------
+
+<div class="card">
+  <div class="card-body">
+    This is some text within a card body.
+  </div>
+</div>
+
+------------
+The content
+------------
+# Visit bootstrap 4 documentation website to select their styling
+# you can copy their styles and edit it accordingly
+# inspect their styles using browser so that you can add/remove class if need be
+# you can override their class by adding your own classname to element and creating css by calling that class.
+
+---------------------------------------
+Finishing mobile compatibility
+---------------------------------------
+#Resolve weird size of content in different screen size.
+
+# in the content col, specify the size of col on multiple screen size
+
+#ie, replace
+				<div class="col">
+
+	 with
+	 			<div class="col-sm-12 col-md-8 ">
+
+# now this col will take 12 space in smaller screen and above and 8 in medium screen and above.
+
+
+
+					███████▀▀▀░░░░░░░▀▀▀███████
+					████▀░░░░░░░░░░░░░░░░░▀████
+					███│░░░░░░░░░░░░░░░░░░░│███
+					██▌│░░░░░░░░░░░░░░░░░░░│▐██
+					██░└┐░░░░░░░░░░░░░░░░░┌┘░██
+					██░░└┐░░░░░░░░░░░░░░░┌┘░░██
+					██░░┌┘▄▄▄▄▄░░░░░▄▄▄▄▄└┐░░██
+					██▌░│██████▌░░░▐██████│░▐██
+					███░│▐███▀▀░░▄░░▀▀███▌│░███
+					██▀─┘░░░░░░░▐█▌░░░░░░░└─▀██
+					██▄░░░▄▄▄▓░░▀█▀░░▓▄▄▄░░░▄██
+					████▄─┘██▌░░░░░░░▐██└─▄████
+					█████░░▐█─┬┬┬┬┬┬┬─█▌░░█████
+					████▌░░░▀┬┼┼┼┼┼┼┼┬▀░░░▐████
+					█████▄░░░└┴┴┴┴┴┴┴┘░░░▄█████
+					███████▄░░░░░░░░░░░▄███████
+					██████████▄▄▄▄▄▄▄██████████
+					███████████████████████████    
+
+
+**********************************************************************************************
+						SASS - Syntactically Awesome Style Sheet
+**********************************************************************************************
+# SASS is a CSS Pre-proccessor. ie, framework that takes input sass and outputs css.
+# SASS outputs CSS that is well structued, optimised for http.
+# SASS has advanced supports like variables, mixins, extending classes, imports...
+
+--------------------------
+one way to install SASS
+--------------------------
+#install ruby installer  [ https://rubyinstaller.org/downloads/ ]
+
+>> gem install sass
+
+#check sass version using
+>> sass -v
+
+--------------------------------------
+how to watch over sass to create css dynamically
+---------------------------------------
+
+>> sass --watch styles.sass:styles.css
+
+#now the command prompt will listen to every changes to styles.sass and implement it into styles.css
+
+#SASS manual compilation
+>> sass souce.sass out.css
+
+----------------------
+SASS syntax
+----------------------
+//Variables
+
+$brand-main:            #6600cc
+$brand-sub:             #cc66ff
+$brand-dark:            #333
+$brand-light:           #e6f2ff
+
+
+//Mixins
+
+=shaping($height, $width, $rad, $bg, $color)
+    height:                 $height
+    width:                  $width
+    -webkit-border-radius:  $rad
+    -moz-border-radius:     $rad
+    -ms-border-radius:      $rad
+    border-radius:          $rad
+    background-color:       $bg
+    color:                  $color
+
+
+//Styles
+
+body
+	background-color: $brand-light
+
+.thumb1
+	+shaping(120px, 120px, 10%, $brand-dark, $brand-light)
+	margin: 0 150px -90px
+
+
+----------------------
+SASS structuing files
+----------------------
+# divide whole SASS into 5 categories and every components fall under one of them.
+# we are dividing SASS into multiple small SASS snippets that are more managable.
+# use import to connect them.
+# use partials (_filename.sass) to avoid creating multiple CSS files.
+
+
+
+------------------------
+class extending 
+------------------------
+.alert
+	margin: 2px
+	padding: 1rem
+	border: 1px solid #eee
+	text-align: center
+
+.danger_alert
+	@extends .alert
+	background-color: red
+

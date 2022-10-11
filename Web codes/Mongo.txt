@@ -1,0 +1,70 @@
+
+******************************************************************************************************
+									MONGO
+******************************************************************************************************
+
+# mondodb is a nosql database. meaning that it has no predefined structure like sql.
+# basically you are starting with a blacnk canvas. whatever you do forms a collection.
+# it is very similar to javascript json format.
+
+-----------------------------
+	installation
+-----------------------------
+
+# https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/ 
+
+#for windows:
+	- download mongodb installer community edition (version below 4.0.2 if not windows 10)
+	- create c:/data/db folder
+	- specify path
+
+#note: we never use database directly in our app. we use interfaces to deal with databases peoperly.
+
+// start mango server
+>> mongod  (keep this running)
+
+// access mango shell
+>> mongo 	 (db shell) 
+
+
+
+-------------------------------
+	database commands
+-------------------------------
+#note: everything is extremely case sensitive.
+
+// show all databases.
+>> show dbs 
+
+// Access existing or create new database
+// note: in case of new database, it wont show in db list until you put a new collection(table) in it.
+>> use [database_name]
+
+//insert element
+//product is the new collection/table that is made on the go
+>>db.product.insert( {"productName" : "toy car", "price" : 1200, "mrp" : 1500 } ) 
+
+// display all collection in a database
+>> show collections
+
+// show data in a collection
+>> db.product.find()
+
+// pretty display of data
+>> db.product.find().pretty()
+
+//find with conditionals
+>> db.product.find( {"productName" : "toy car"}  )
+
+//update existing entry
+>> db.product.update( {"productName" : "toy car"}, { $set : { "price" : 1700 } } )
+
+//remove entry
+>> db.product.remove( { "productName" : "toy car" } )
+
+//remove only one entry
+>> db.product.remove( { "productName" : "toy car" }, { justOne : true } )
+
+
+#refer mongodb documentation for more functionalities.
+
